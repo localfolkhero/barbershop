@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+music21 = "*"
+django = "*"
+django-login-required-middleware = "*"
+django-allauth-ui = "*"
+django-allauth = "*"
+django-widget-tweaks = "*"
+python-dotenv = "*"
+django-debug-toolbar = "*"
+gunicorn = "*"
+django-storages = {extras = ["google"], version = "*"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

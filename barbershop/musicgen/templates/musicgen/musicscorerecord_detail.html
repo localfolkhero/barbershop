@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% comment %} <html>
+<head>
+    
+</head> {% endcomment %}
+
+{% block extra_css %}
+<style>
+    .waterfall-visualizer {
+        height: 400px;
+    }
+</style>
+{% endblock %}
+{% comment %} <body> {% endcomment %}
+    
+
+{% block content %}
+
+<table>
+    <tr>
+        <td>ABC Notation</td>
+        <td>Sheet Music</td>
+    </tr>
+    
+    <tr>
+        <td><textarea style="height:300px;width:300px" id="abc">{{object.abcnotation}}</textarea></td>
+        <td>
+            <div id="paper"></div>
+            <div id="warnings"></div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td>
+            <a class="btn btn-warning" href="{% url 'score-musicxml' object.id %}">Download MusicXML File</a><br>
+            <a class="btn btn-info" href="{% url 'score-midi' object.id %}">Download MIDI File</a>
+        </td>
+        <td>
+            <div>
+                <midi-player src="{% url 'score-midi' object.id %}" sound-font visualizer="#myVisualizer">
+                </midi-player>
+            </div>
+            <div id="waterfall">
+                <midi-visualizer showOnlyOctavesUsed="true" type="waterfall" id="myVisualizer"></midi-visualizer>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}
+
+
+{% comment %} </body> {% endcomment %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/abcjs@6.0.0/dist/abcjs-basic-min.js" ></script>
+
+<script>
+    const visualizer = document.getElementById("myVisualizer");
+    
+    visualizer.config = {
+        showOnlyOctavesUsed: true, 
+        activeNoteRGB: "255,00,00",
+        noteRGB: "00,00,255",
+    };
+    
+    // ----
+    {% comment %} window.ABCJS.renderAbc("paper", `{{object.abcnotation}}`); {% endcomment %}
+    
+    window.onload = function() {
+        abc_editor = new window.ABCJS.Editor("abc", { 
+            canvas_id: "paper", 
+            warnings_id:"warnings" 
+        }); 
+    }
+    
+</script>
+{% endblock %}
+{% comment %} </html> {% endcomment %}
