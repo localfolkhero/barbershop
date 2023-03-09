@@ -1,10 +1,10 @@
-# b-project
+# Barbershop
 
 So, one day my son and I went for a walk and started talking about this whole ChatGPT thing.
 
 Well, he's into music and quite talented, so one day I was showing him some of what ChatGPT could do. We saw that it could generate various types of things, even some derivative lyrics. So we were tried to make it generate some music (which it is absolutely terrible at fwiw).
 
-However... the process clued us into something called ABC Notation (https://abcnotation.com/). ChatGPT attempted to generate some poorly constructed music with that as its output. Well, We got to talking and I said, that ABC Notation is 'just a bunch of text', and you know that you can probably generate your own music with some python code.
+However... the process clued us into something called ABC Notation (https://abcnotation.com/). ChatGPT attempted to generate some poorly constructed music with that as its output. Well, we got to talking and I said, that ABC Notation is 'just a bunch of text', and you know that you can probably generate your own music with some python code.
 
 So we did that. And this is that experiment.
 
