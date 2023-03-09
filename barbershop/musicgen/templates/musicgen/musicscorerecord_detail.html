@@ -1,31 +1,53 @@
 {% extends "base.html" %}
 
-{% comment %} <html>
-<head>
-    
-</head> {% endcomment %}
-
 {% block extra_css %}
 <style>
     .waterfall-visualizer {
         height: 400px;
     }
-</style>
-{% endblock %}
-{% comment %} <body> {% endcomment %}
     
+    x-star-rating {
+        font-family: 'Ionicons';
+        font-size: 20px;
+        display: inline-flex;
+        cursor: pointer;
+        letter-spacing: .2rem;
+    }
+    
+    x-star-rating > .star::after {
+        content: '\f251';
+        color: #777;
+    }
+    
+    x-star-rating > .star.full::after {
+        content: '\f251';
+        color: #fd0;
+    }    
+
+    /* Content codes: https://github.com/rstacruz/iconfonts/blob/master/stylesheets/ionicons.styl */
+
+</style>
+<link rel="stylesheet" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+{% endblock %}
+
 
 {% block content %}
 
 <table>
     <tr>
         <td>ABC Notation</td>
-        <td>Sheet Music</td>
+        <td>
+            Sheet Music
+        </td>
+        <td>
+            Rating: 
+            <x-star-rating value="5" number="9"></x-star-rating>
+        </td>
     </tr>
     
     <tr>
         <td><textarea style="height:300px;width:300px" id="abc">{{object.abcnotation}}</textarea></td>
-        <td>
+        <td colspan=2>
             <div id="paper"></div>
             <div id="warnings"></div>
         </td>
@@ -51,7 +73,6 @@
 {% endblock %}
 
 
-{% comment %} </body> {% endcomment %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0"></script>
@@ -66,9 +87,6 @@
         noteRGB: "00,00,255",
     };
     
-    // ----
-    {% comment %} window.ABCJS.renderAbc("paper", `{{object.abcnotation}}`); {% endcomment %}
-    
     window.onload = function() {
         abc_editor = new window.ABCJS.Editor("abc", { 
             canvas_id: "paper", 
@@ -77,5 +95,78 @@
     }
     
 </script>
+
+<script>
+    // Approach from: https://github.com/GeekLaunch/star-rating
+    class StarRating extends HTMLElement {
+        get value () {
+            return this.getAttribute('value') || 0;
+        }
+        
+        set value (val) {
+            this.setAttribute('value', val);
+            this.highlight(this.value - 1);
+        }
+        
+        get number () {
+            return this.getAttribute('number') || 5;
+        }
+        
+        set number (val) {
+            this.setAttribute('number', val);
+            
+            this.stars = [];
+            
+            while (this.firstChild) {
+                this.removeChild(this.firstChild);
+            }
+            
+            for (let i = 0; i < this.number; i++) {
+                let s = document.createElement('div');
+                s.className = 'star';
+                this.appendChild(s);
+                this.stars.push(s);
+            }
+            
+            this.value = this.value;
+        }
+        
+        highlight (index) {
+            this.stars.forEach((star, i) => {
+                star.classList.toggle('full', i <= index);
+            });
+        }
+        
+        constructor () {
+            super();
+            
+            this.number = this.number;
+            
+            this.addEventListener('mousemove', e => {
+                let box = this.getBoundingClientRect(),
+                starIndex = Math.floor((e.pageX - box.left) / box.width * this.stars.length);
+                
+                this.highlight(starIndex);
+            });
+            
+            this.addEventListener('mouseout', () => {
+                this.value = this.value;
+            });
+            
+            this.addEventListener('click', e => {
+                let box = this.getBoundingClientRect(),
+                starIndex = Math.floor((e.pageX - box.left) / box.width * this.stars.length);
+                
+                this.value = starIndex + 1;
+                
+                let rateEvent = new Event('rate');
+                this.dispatchEvent(rateEvent);
+            });
+        }
+    }
+    
+    customElements.define('x-star-rating', StarRating);
+    
+    
+</script>
 {% endblock %}
-{% comment %} </html> {% endcomment %}
