@@ -1,4 +1,4 @@
-# b-project
+# Barbershop
 
 So, one day my son and I went for a walk and started talking about this whole ChatGPT thing.
 
