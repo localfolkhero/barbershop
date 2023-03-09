@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
-from .models import MusicScoreRecord
+from .models import MusicScoreRecord, MusicScoreRating
 
 from .generator import RandomMusicGenerator, ABCtoMusicConverter
 
@@ -86,3 +86,27 @@ class MusicScoreCreateView( CreateView ):
         self.object.save()
         
         return super().form_valid(form)
+    
+# Method to handle ajax request to update a rating for a score
+def update_rating(request, pk):
+    rating = request.POST.get('rating', None)   
+    
+    # Any user who wants to rate something - we know the users by logged in user
+    user = request.user
+    score = MusicScoreRecord.objects.get(pk=pk)
+    
+    # Get existing score, or create a new one if there isn't one.
+    score_rating, created = MusicScoreRating.objects.get_or_create(user=user, score=score)
+
+    # Update and save.
+    score_rating.rating = rating
+    score_rating.save()
+    
+    # Return some value which might be helpful or useful. But not 100% required.
+    data = {
+        'value': rating,
+        'created': created
+    }
+    
+    return JsonResponse(data)
+    

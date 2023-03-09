@@ -40,8 +40,8 @@
             Sheet Music
         </td>
         <td>
-            Rating: 
-            <x-star-rating value="5" number="9"></x-star-rating>
+            Rating <a target="_blank" href="https://www.youtube.com/watch?v=rdJtb1RdkBY">(?)</a>: {{object.musicscorerating_set.all.0.rating}}
+            <x-star-rating value="{{object.musicscorerating_set.all.0.rating}}" number="9"></x-star-rating>
         </td>
     </tr>
     
@@ -161,6 +161,22 @@
                 
                 let rateEvent = new Event('rate');
                 this.dispatchEvent(rateEvent);
+
+                console.log(this.value);
+
+                $.ajax({
+                    type: "POST",
+                    url: 'update_rating',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                        'score_id': 20, 
+                        'rating': this.value
+                    },
+                    success: function( data ) {
+                        console.log( "Returned");
+                        console.log( data );
+                      }
+                  });
             });
         }
     }
