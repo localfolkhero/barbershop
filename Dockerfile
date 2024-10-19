@@ -1,5 +1,5 @@
-#
-ARG PYTHON_BASE=3.9
+
+ARG PYTHON_BASE=3.9.13
 
 FROM python:${PYTHON_BASE} as PYTHON_BASE
 
@@ -10,18 +10,17 @@ ENV PIPENV_VENV_IN_PROJECT 1
 
 WORKDIR /usr/src
 
-COPY ./Pipfile .
-COPY ./Pipfile.lock .
-
 COPY . .
+RUN chmod +x entrypoint.sh
 
-RUN pipenv install 
+RUN pipenv install --system --deploy
 
 WORKDIR /usr/src/barbershop
 
-RUN pipenv run python manage.py collectstatic --noinput
+# RUN pipenv run python manage.py migrate
+# RUN pipenv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-ENTRYPOINT [ "pipenv" ]
-CMD ["run", "gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "barbershop.wsgi"]
+
+ENTRYPOINT ["/usr/src/entrypoint.sh"]

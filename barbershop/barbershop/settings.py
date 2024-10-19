@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",  # <-- for google idp
     "widget_tweaks",  # all-auth-ui
     
+    "slippers",         # Required for allauth(ui)
+    
     # Django Debug Toolbar
     "debug_toolbar", 
     
@@ -74,6 +76,7 @@ MIDDLEWARE = [
     'login_required.middleware.LoginRequiredMiddleware', # Has to be after AuthenticationMiddleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'barbershop.urls'
@@ -153,12 +156,12 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-STATICFILES_STORAGE = 'barbershop.storage_backends.GoogleCloudStaticStorage'
+STATIC_URL = 'static/'
 
-GS_STATIC_BUCKET_NAME = 'bproject-static'
+# STATICFILES_STORAGE = 'barbershop.storage_backends.GoogleCloudStaticStorage'
+# STATIC_URL = 'https://storage.googleapis.com/{}/'.format(GS_STATIC_BUCKET_NAME)
+# GS_STATIC_BUCKET_NAME = 'bproject-static'
 
-# STATIC_URL = 'static/'
-STATIC_URL = 'https://storage.googleapis.com/{}/'.format(GS_STATIC_BUCKET_NAME)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_BUCKET_SECRETS_FILE", '../secrets.json') 
 

@@ -14,6 +14,10 @@ python-dotenv = "*"
 django-debug-toolbar = "*"
 gunicorn = "*"
 django-storages = {extras = ["google"], version = "*"}
+pyjwt = "*"
+cryptography = "*"
+slippers = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

@@ -1,0 +1,25 @@
+
+services:
+  web:
+    env_file:
+      - .env
+    build: .
+    # command: pipenv run gunicorn --bind 0.0.0.0:8000 --workers 4 barbershop.wsgi
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    hostname: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: barbershop
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+
+volumes:
+  postgres_data:
