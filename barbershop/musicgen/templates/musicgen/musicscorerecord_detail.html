@@ -60,7 +60,7 @@
         </td>
         <td>
             <div>
-                <midi-player src="{% url 'score-midi' object.id %}" visualizer="#myVisualizer">
+                <midi-player src="{% url 'score-midi' object.id %}" sound-font visualizer="#myVisualizer">
                 </midi-player>
             </div>
             <div id="waterfall">
@@ -94,12 +94,13 @@
         });
     }
 
-    // Mobile browsers suspend AudioContext until a user gesture — unlock it on first touch.
-    document.addEventListener('touchstart', async function() {
+    // Mobile browsers suspend AudioContext until a user gesture. Fire in capture phase so
+    // Tone.start() is called before the shadow-DOM play button handles the same click.
+    document.querySelector('midi-player').addEventListener('click', function() {
         if (typeof Tone !== 'undefined' && Tone.context.state !== 'running') {
-            await Tone.start();
+            Tone.start();
         }
-    }, { once: true });
+    }, true);
 
 </script>
 
