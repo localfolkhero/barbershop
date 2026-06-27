@@ -16,4 +16,6 @@ WORKDIR /usr/src/barbershop
 
 EXPOSE 8000
 
+RUN chmod +x entrypoint.sh
+
 ENTRYPOINT ["/usr/src/entrypoint.sh"]

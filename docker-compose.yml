@@ -29,6 +29,8 @@ services:
       image: cloudflare/cloudflared:latest
       container_name: cloudflared-connector
       restart: unless-stopped
+      profiles:
+        - cloudflare
       environment:
         - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
       command: tunnel --no-autoupdate run
