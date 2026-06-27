@@ -9,6 +9,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - webapp-network
 
   db:
     image: postgres:13
@@ -19,6 +21,8 @@ services:
       POSTGRES_DB: barbershop
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+    networks:
+      - webapp-network
 
 
   cloudflared:
@@ -29,10 +33,17 @@ services:
         - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
       command: tunnel --no-autoupdate run
       networks:
-        - scouting-network
+        - webapp-network
       depends_on:
-        scouting-app:
+        web:
           condition: service_healthy
 
 volumes:
   postgres_data:
+
+networks:
+  webapp-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
