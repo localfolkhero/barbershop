@@ -21,5 +21,18 @@ services:
       POSTGRES_PASSWORD: password
 
 
+  cloudflared:
+      image: cloudflare/cloudflared:latest
+      container_name: cloudflared-connector
+      restart: unless-stopped
+      environment:
+        - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+      command: tunnel --no-autoupdate run
+      networks:
+        - scouting-network
+      depends_on:
+        scouting-app:
+          condition: service_healthy
+
 volumes:
   postgres_data:
