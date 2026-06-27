@@ -60,7 +60,7 @@
         </td>
         <td>
             <div>
-                <midi-player src="{% url 'score-midi' object.id %}" sound-font visualizer="#myVisualizer">
+                <midi-player src="{% url 'score-midi' object.id %}" visualizer="#myVisualizer">
                 </midi-player>
             </div>
             <div id="waterfall">
@@ -95,9 +95,9 @@
     }
 
     // Mobile browsers suspend AudioContext until a user gesture — unlock it on first touch.
-    document.addEventListener('touchstart', function() {
+    document.addEventListener('touchstart', async function() {
         if (typeof Tone !== 'undefined' && Tone.context.state !== 'running') {
-            Tone.start();
+            await Tone.start();
         }
     }, { once: true });
 
