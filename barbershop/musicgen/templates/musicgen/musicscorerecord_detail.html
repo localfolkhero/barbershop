@@ -88,12 +88,19 @@
     };
     
     window.onload = function() {
-        abc_editor = new window.ABCJS.Editor("abc", { 
-            canvas_id: "paper", 
-            warnings_id:"warnings" 
-        }); 
+        abc_editor = new window.ABCJS.Editor("abc", {
+            canvas_id: "paper",
+            warnings_id:"warnings"
+        });
     }
-    
+
+    // Mobile browsers suspend AudioContext until a user gesture — unlock it on first touch.
+    document.addEventListener('touchstart', function() {
+        if (typeof Tone !== 'undefined' && Tone.context.state !== 'running') {
+            Tone.start();
+        }
+    }, { once: true });
+
 </script>
 
 <script>
